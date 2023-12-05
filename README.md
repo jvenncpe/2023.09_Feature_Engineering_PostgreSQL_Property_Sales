@@ -7,13 +7,13 @@
 
 Capstone project output from "SP701 SQL for Data Engineering" facilitated by Project SPARTA from Development Academy of the Philippines. The course aims to teach us about tidying up and altering data using SQL, shifting data from one database style to another (such as turning operational data into reports) using SQL, and managing large amounts of data in batches using SQL.
 
-## Activity
-
-![Activity](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/4c7983ea-c283-410d-9a5c-82867fc7f462)
-
 ## Overall Peer Grade Assessment
 
 ![Grade](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/0ca95ba9-c26b-49ff-b897-bf32d93b9fed)
+
+## Activity
+
+![Activity](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/4c7983ea-c283-410d-9a5c-82867fc7f462)
 
 ## Dataset Context
 

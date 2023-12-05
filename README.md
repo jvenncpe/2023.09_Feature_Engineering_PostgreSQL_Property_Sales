@@ -271,6 +271,8 @@ The dataset describes the sale of individual residential property in Ames, Iowa 
 ![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/8ae68c94-81c2-4825-abd1-2e26355960a0)
 ![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/517d1fd2-8504-4b2a-a750-dda49270198a)
 
+---
+#### *Overall, the tasks above included One-Hot Encoding, Ordinal Encoding, Mean Encoding, Mean Normalization, and Standardization. Each step was meticulously detailed with visuals and SQL queries, ensuring a thorough and well-documented process.*
 
 # Thank you!
 

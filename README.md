@@ -8,6 +8,9 @@
 Capstone project output from "SP701 SQL for Data Engineering" facilitated by Project SPARTA from Development Academy of the Philippines. The course aims to teach us about tidying up and altering data using SQL, shifting data from one database style to another (such as turning operational data into reports) using SQL, and managing large amounts of data in batches using SQL.
 
 ## Activity
+
+![Activity](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/4c7983ea-c283-410d-9a5c-82867fc7f462)
+
 Perform the following Feature Engineering tasks:
 	
 	Task1: Perform One-Hot Encoding on the variable on one or more Categorical Variables in the dataset
@@ -28,6 +31,34 @@ Perform the following Feature Engineering tasks:
 ## Dataset Context
 
 The dataset describes the sale of individual residential property in Ames, Iowa from 2006 to 2010. The data set contains 2930 observations and originally has a large number of explanatory variables (23 nominal, 23 ordinal, 14 discrete, and 20 continuous) involved in assessing home values.
+
+## Criteria
+
+![Criteria](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/4961daac-6770-4fd9-af9f-cc34d52c4d5b)
+
+## Peer Grade Assessment
+
+![1](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/f122707d-6ab4-4c9e-9f0a-0664127ba825)
+
+
+![2](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/1c4ef5d8-881a-4f1c-8091-690c0302cfaa)
+
+
+![3](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/0ac5ba92-95b5-4d1f-8775-ed01761fe1a2)
+
+
+![4](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/514b7890-57df-4032-922d-11bdfaa08c37)
+
+
+![5](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/9e481e81-1142-469f-8d6c-027de05a092e)
+
+
+
+## Overall Peer Grade Assessment
+
+![Grade](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/0ca95ba9-c26b-49ff-b897-bf32d93b9fed)
+
+---
 
 ## Methodology & Results
 ---
@@ -108,7 +139,7 @@ The dataset describes the sale of individual residential property in Ames, Iowa 
 ![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/423c373a-6a47-4758-a5dd-06eba66660c0)
 
 ---
-### Task3: Perform Mean encoding on one or more Categorical Variables in the dataset (hint: you may want to use OVER() and PARTITION() commands)
+### Task3: Perform Mean encoding on one or more Categorical Variables in the dataset
 - Mean Encoding Output 
 
 ![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/8a396e34-7b23-4cea-8a59-d902defb10e8)
@@ -148,7 +179,7 @@ The dataset describes the sale of individual residential property in Ames, Iowa 
 ![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/33c15399-de70-40a5-bd3e-a6d885325ef2)
 
 ---
-### Task4: Perform Mean Normalization on all the numeric variables to rescale these variables (you may add new columns for this)
+### Task4: Perform Mean Normalization on all the numeric variables to rescale these variables 
 - Mean Normalization Output 
 
 ![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/f73b97db-1a78-4d11-b16b-3da3129daf2d)
@@ -156,8 +187,8 @@ The dataset describes the sale of individual residential property in Ames, Iowa 
 > Steps Below:
 ---
 
-- Determine categorical variables for Mean Normalization
-- CATEGORICAL COLUMN TO USE: lotfrontage, lotarea, garagearea, grlivarea, totalbsmtsf, saleprice
+- Determine numeric variables for Mean Normalization
+- NUMERIC COLUMN TO USE: lotfrontage, lotarea, garagearea, grlivarea, totalbsmtsf, saleprice
 
 ![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/7e29d5b6-724b-435a-aa99-bf53208aaf34)
 
@@ -199,13 +230,69 @@ The dataset describes the sale of individual residential property in Ames, Iowa 
 ![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/f1706ebd-a2ea-443b-8dbd-718b8ff5da86)
 
 ---
-### Task5: Perform Standardization on all the numeric variables to rescale these variables (you may add new columns for this)
+### Task5: Perform Standardization on all the numeric variables to rescale these variables
+- Standardization Output 
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/93674d22-5436-40ef-a38c-0dadbc30a6e7)
+
+
+> Steps Below:
+---
+
+- Determine numeric variables for Standardization
+- NUMERIC COLUMN TO USE: garagearea, grlivarea, totalbsmtsf, saleprice
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/1c1c7aaf-78ee-4bd5-a3ee-cee9b18770c0)
+
+
+- Executing a SELECT-FROM query to perform Standardization.
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/2f84bf64-0683-4380-a24b-07aaaf188344)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/c7471e31-72b1-417f-ae89-ebf9e7de6768)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/aa6a6c0b-3f18-4c06-a16a-b70b5286cc89)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/9fc8efd6-7273-4c4c-9b88-de9793adf24e)
+
+
+- To verify rescaling values
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/174fecb9-fe57-4d75-b9aa-87179de4e917)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/79b81048-bb9d-4560-9c6d-39eba9a1d228)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/10ffe494-d6ca-4e5f-8232-8ada860610a0)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/07f99d2f-bdf0-496a-99ed-40f14a1cba41)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/143c0784-b554-475d-83be-460644846fa7)
+
+
+
+- Update table by adding columns for Standardization storage.
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/984df6d8-0f08-4a81-af30-bae640c27d86)
+
+
+
+- Populate the added columns from the select query that was used to perform Standardization.
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/84b8ca3f-a40c-417f-8bc7-7ddbdc869a50)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/f3aee9cf-59b8-4c18-bcbb-d6338bedfa1b)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/48da1776-9a42-41b8-8bb1-511949f9881a)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/9e8a72a3-a706-40f6-bf51-6091fbc2173e)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/226864d5-9dd5-46ee-bf84-3103ad0bf615)
+
+
+
+- Confirm and validate the values in the added columns, then display all values
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/8ae68c94-81c2-4825-abd1-2e26355960a0)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/517d1fd2-8504-4b2a-a750-dda49270198a)
 
 
 
 ## Discussion
 
-![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/03ec8e0d-019c-45e7-9d61-abdebc8351cc)
+Overall, the general steps are as follows:
+- Identifying columns to be used for Feature Engineering techniques like one-hot encoding, nominal or label encoding, mean encoding, mean normalization, or standardization.
+- Craft a nested SELECT-QUERY to satisfy the required transformations while handling 'NA' or 'NULL' values within columns like 'lotfrontage'. These values are addressed without removing entire rows; instead, a subquery is employed to transform specific columns, maintaining data integrity by using nested subqueries and conditional transformations.
+- After finalizing the SELECT-QUERY, new columns are added to the table to store the transformed data. The SELECT-QUERY is then nested within an INSERT INTO statement to update the tables accordingly.
+
 
 # Thank you!
 
@@ -213,38 +300,5 @@ The dataset describes the sale of individual residential property in Ames, Iowa 
 ---
 ---
 
-# Capstone Peer Grade
-## Activity
 
-![Activity](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/b4d850c6-bce1-4906-aef8-dc9ef578022a)
-
-
-
-## Criteria
-
-![Criteria](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/43fc56bc-267b-48d1-ad3d-1d432bf4df00)
-
-
-
-## Peer Assessment
-
-![1](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/f122707d-6ab4-4c9e-9f0a-0664127ba825)
-
-
-![2](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/1c4ef5d8-881a-4f1c-8091-690c0302cfaa)
-
-
-![3](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/0ac5ba92-95b5-4d1f-8775-ed01761fe1a2)
-
-
-![4](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/514b7890-57df-4032-922d-11bdfaa08c37)
-
-
-![5](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/9e481e81-1142-469f-8d6c-027de05a092e)
-
-
-
-## Overall Peer Grade Assessment
-
-![Grade](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/0ca95ba9-c26b-49ff-b897-bf32d93b9fed)
 

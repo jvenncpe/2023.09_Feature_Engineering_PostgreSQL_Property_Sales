@@ -1,0 +1,291 @@
+/* 
+	Task1: Perform One-Hot Encoding on the variable on one or more Categorical Variables in the dataset
+	Export: feature_engineering_task1.txt
+*/
+
+
+
+
+
+------------- Determine categorical variables and no. of ditinct values to be used for One-Hot Encoding
+SELECT COUNT(DISTINCT mssubclass) AS distinct_mssubclass
+	FROM property_sales;
+	-- No. of Distinct Categories: 15 Counts
+
+
+SELECT COUNT(DISTINCT lotshape) AS distinct_lotshape
+	FROM property_sales;
+	-- No. of Distinct Categories: 4 Counts
+	
+
+SELECT COUNT(DISTINCT landcontour) AS distinct_landcontour
+	FROM property_sales;
+	-- No. of Distinct Categories: 4 Counts
+
+
+SELECT COUNT(DISTINCT landslope) AS distinct_landslope
+	FROM property_sales;
+	-- No. of Distinct Categories: 3 Counts
+
+
+SELECT COUNT(DISTINCT bldgtype) AS distinct_bldgtype
+	FROM property_sales;
+	-- No. of Distinct Categories: 5 Counts
+
+
+SELECT COUNT(DISTINCT housestyle) AS distinct_housestyle
+	FROM property_sales;
+	-- No. of Distinct Categories: 8 Counts
+
+
+SELECT COUNT(DISTINCT overallqual) AS distinct_overallqual
+	FROM property_sales;
+	-- No. of Distinct Categories: 10 Counts
+
+ 
+SELECT COUNT(DISTINCT overallcond) AS distinct_overallcond
+	FROM property_sales;
+	-- No. of Distinct Categories: 9 Counts
+		
+		
+		
+
+
+------------- Chosen categorical columns are as follows: lotshape, landcontour, landslope
+/*
+	Context:
+	The goal is to perform one-hot encoding on the categorical columns "lotshape," 
+	"landcontour," and "landslope." This process will create binary columns for 
+	each unique category within these columns, allowing for easier analysis and 
+	machine learning tasks.
+*/
+
+
+
+SELECT DISTINCT lotshape FROM property_sales;
+	-- No. of Categories = No. of Distinct Counts = 4
+	/* Categories: 
+			"Moderately Irregular"
+			"Slightly irregular"
+			"Regular"
+			"Irregular"
+	*/
+	/* As COLUMNS: 
+			'moderately_irregular'
+			'slightly_irregular'
+			'regular'
+			'irregular'
+	*/
+
+SELECT DISTINCT landcontour FROM property_sales;
+	-- No. of Categories = No. of Distinct Counts = 4
+	/* Categories: 
+			"Depression"
+			"Hillside - Significant slope from side to side"
+			"Banked - Quick and significant rise from street grade to building"
+			"Near Flat/Level"
+	*/
+	/* As COLUMNS: 
+			'depression'
+			'hillside'
+			'banked'
+			'near_flat_level'
+	*/
+
+SELECT DISTINCT landslope FROM property_sales;
+	-- No. of Categories = No. of Distinct Counts = 3
+	/* Categories: 
+			"Gentle slope"
+			"Moderate Slope"
+			"Severe Slope"
+	*/
+	/* As COLUMNS: 
+			'gentle_slope'
+			'moderate_slope'
+			'severe_slope'
+	*/
+
+
+
+
+
+------------------------------ ONE-HOT ENCODING
+SELECT
+	lotshape,
+    CASE WHEN lotshape = 'Moderately Irregular' THEN 1 ELSE 0 END AS moderately_irregular,
+    CASE WHEN lotshape = 'Slightly irregular' THEN 1 ELSE 0 END AS slightly_irregular,
+    CASE WHEN lotshape = 'Regular' THEN 1 ELSE 0 END AS regular,
+	CASE WHEN lotshape = 'Irregular' THEN 1 ELSE 0 END AS irregular,
+	
+	landcontour,
+	CASE WHEN landcontour = 'Depression' THEN 1 ELSE 0 END AS depression,
+	CASE WHEN landcontour = 'Hillside - Significant slope from side to side' THEN 1 ELSE 0 END AS hillside,
+	CASE WHEN landcontour = 'Banked - Quick and significant rise from street grade to building' THEN 1 ELSE 0 END AS banked,
+	CASE WHEN landcontour = 'Near Flat/Level' THEN 1 ELSE 0 END AS near_flat_level,
+	
+	landslope,
+	CASE WHEN landslope = 'Gentle slope' THEN 1 ELSE 0 END AS gentle_slope,
+	CASE WHEN landslope = 'Moderate Slope' THEN 1 ELSE 0 END AS moderate_slope,
+	CASE WHEN landslope = 'Severe Slope' THEN 1 ELSE 0 END AS severe_slope
+	
+ 
+FROM property_sales;
+
+
+
+
+
+------------------------------ UPDATE TO TABLE
+-- UPDATE TABLE property_sales using UPSERT Technique
+--Review:
+/*
+	INSERT INTO tablename (columnname1, columnname2, columnname3,... )
+	SELECT ___, ___, ___,
+	FROM (another.tablename)
+	
+	ON CONFLICT ON CONSTRAINT ...
+	DO UPDATE SET ... = ...
+*/
+
+
+
+
+
+--------------- ADD COLUMNS TO TABLE
+ALTER TABLE property_sales	
+	ADD COLUMN	moderately_irregular INTEGER,
+	ADD COLUMN	slightly_irregular INTEGER,
+	ADD COLUMN	regular INTEGER,
+	ADD COLUMN	irregular INTEGER,
+	ADD COLUMN	depression INTEGER,
+	ADD COLUMN	hillside INTEGER,
+	ADD COLUMN	banked INTEGER,
+	ADD COLUMN	near_flat_level INTEGER,
+	ADD COLUMN	gentle_slope INTEGER,
+	ADD COLUMN	moderate_slope INTEGER,
+	ADD COLUMN	severe_slope INTEGER;
+
+
+
+
+
+--------------- POPULATE ADDED COLUMNS
+INSERT INTO property_sales
+(
+	id,
+	moderately_irregular,
+	slightly_irregular,
+	regular,
+	irregular,
+	depression,
+	hillside,
+	banked,
+	near_flat_level,
+	gentle_slope,
+	moderate_slope,
+	severe_slope
+)
+
+SELECT
+	table_a.id,
+	table_b.moderately_irregular AS moderately_irregular,
+	table_b.slightly_irregular AS slightly_irregular,
+	table_b.regular AS regular,
+	table_b.irregular AS irregular,
+	table_b.depression AS depression,
+	table_b.hillside AS hillside,
+	table_b.banked AS banked,
+	table_b.near_flat_level AS near_flat_level,
+	table_b.gentle_slope AS gentle_slope,
+	table_b.moderate_slope AS moderate_slope,
+	table_b.severe_slope AS severe_slope
+	
+FROM 
+	property_sales as table_a
+	
+	INNER JOIN
+	(
+		SELECT
+			id,
+			moderately_irregular,
+			slightly_irregular,
+			regular,
+			irregular,
+			depression,
+			hillside,
+			banked,
+			near_flat_level,
+			gentle_slope,
+			moderate_slope,
+			severe_slope
+		FROM 
+		(
+			SELECT
+				id,
+			
+				lotshape,
+				CASE WHEN lotshape = 'Moderately Irregular' THEN 1 ELSE 0 END AS moderately_irregular,
+				CASE WHEN lotshape = 'Slightly irregular' THEN 1 ELSE 0 END AS slightly_irregular,
+				CASE WHEN lotshape = 'Regular' THEN 1 ELSE 0 END AS regular,
+				CASE WHEN lotshape = 'Irregular' THEN 1 ELSE 0 END AS irregular,
+
+				landcontour,
+				CASE WHEN landcontour = 'Depression' THEN 1 ELSE 0 END AS depression,
+				CASE WHEN landcontour = 'Hillside - Significant slope from side to side' THEN 1 ELSE 0 END AS hillside,
+				CASE WHEN landcontour = 'Banked - Quick and significant rise from street grade to building' THEN 1 ELSE 0 END AS banked,
+				CASE WHEN landcontour = 'Near Flat/Level' THEN 1 ELSE 0 END AS near_flat_level,
+
+				landslope,
+				CASE WHEN landslope = 'Gentle slope' THEN 1 ELSE 0 END AS gentle_slope,
+				CASE WHEN landslope = 'Moderate Slope' THEN 1 ELSE 0 END AS moderate_slope,
+				CASE WHEN landslope = 'Severe Slope' THEN 1 ELSE 0 END AS severe_slope
+
+
+			FROM property_sales
+		)
+	) as table_b 
+	ON table_a.id = table_b.id
+
+ON CONFLICT ON CONSTRAINT q_id
+DO UPDATE SET 
+    moderately_irregular = EXCLUDED.moderately_irregular,
+    slightly_irregular = EXCLUDED.slightly_irregular,
+    regular = EXCLUDED.regular,
+    irregular = EXCLUDED.irregular,
+    depression = EXCLUDED.depression,
+    hillside = EXCLUDED.hillside,
+    banked = EXCLUDED.banked,
+    near_flat_level = EXCLUDED.near_flat_level,
+    gentle_slope = EXCLUDED.gentle_slope,
+    moderate_slope = EXCLUDED.moderate_slope,
+    severe_slope = EXCLUDED.severe_slope;
+
+
+
+
+
+--------------- CONFIRM & VALIDATE ADDED COLUMNS
+SELECT 
+	id,
+	lotshape,
+	moderately_irregular,
+	slightly_irregular,
+	regular,
+	irregular,
+	landcontour,
+	depression,
+	hillside,
+	banked,
+	near_flat_level,
+	landslope,
+	gentle_slope,
+	moderate_slope,
+	severe_slope
+	
+	FROM property_sales ORDER BY id;
+	
+	
+	
+	
+--------------- DISPLAY ALL VALUES
+SELECT * FROM property_sales ORDER BY id;

@@ -1,0 +1,382 @@
+/*
+	Task3: Perform Mean encoding on one or more Categorical Variables in the dataset (hint: you may want to use OVER() and PARTITION() commands)
+	Export: feature_engineering _task3.txt
+*/
+
+
+
+
+
+------------- Determine categorical variables for Mean encoding and Target Variable to Predict/Analyze
+SELECT DISTINCT mssubclass AS distinct_mssubclass
+	FROM property_sales;
+	-- No. of Distinct Categories: 15 Counts
+	/*
+		"2-STORY PUD - 1946 & NEWER"
+		"1-STORY PUD (Planned Unit Development) - 1946 & NEWER"
+		"2 FAMILY CONVERSION - ALL STYLES AND AGES"
+		"DUPLEX - ALL STYLES AND AGES"
+		"PUD - MULTILEVEL - INCL SPLIT LEV/FOYER"
+		"SPLIT FOYER"
+		"2-STORY 1945 & OLDER"
+		"2-STORY 1946 & NEWER"
+		"1-STORY 1946 & NEWER ALL STYLES"
+		"2-1/2 STORY ALL AGES"
+		"1-STORY W/FINISHED ATTIC ALL AGES"
+		"SPLIT OR MULTI-LEVEL"
+		"1-STORY 1945 & OLDER"
+		"1-1/2 STORY FINISHED ALL AGES"
+		"1-1/2 STORY - UNFINISHED ALL AGES"
+	*/
+
+
+SELECT DISTINCT lotshape AS distinct_lotshape
+	FROM property_sales;
+	-- No. of Distinct Categories: 4 Counts
+	/*
+		"Moderately Irregular"
+		"Slightly irregular"
+		"Regular"
+		"Irregular"
+	*/
+	
+
+SELECT DISTINCT landcontour AS distinct_landcontour
+	FROM property_sales;
+	-- No. of Distinct Categories: 4 Counts
+	/*
+		"Depression"
+		"Hillside - Significant slope from side to side"
+		"Banked - Quick and significant rise from street grade to building"
+		"Near Flat/Level"
+	*/
+
+SELECT DISTINCT landslope AS distinct_landslope
+	FROM property_sales;
+	-- No. of Distinct Categories: 3 Counts
+	/*
+		"Gentle slope"
+		"Moderate Slope"
+		"Severe Slope"
+	*/
+
+SELECT DISTINCT bldgtype AS distinct_bldgtype
+	FROM property_sales;
+	-- No. of Distinct Categories: 5 Counts
+	/*
+		"Townhouse Inside Unit"
+		"Duplex"
+		"Two-family Conversion; originally built as one-family dwelling"
+		"Single-family Detached"
+		"Townhouse End Unit"	
+	*/
+
+SELECT DISTINCT housestyle AS distinct_housestyle
+	FROM property_sales;
+	-- No. of Distinct Categories: 8 Counts
+	/*
+		"Two and one-half story: 2nd level finished"
+		"One story"
+		"One and one-half story: 2nd level unfinished"
+		"One and one-half story: 2nd level finished"
+		"Two and one-half story: 2nd level unfinished"
+		"Split Level"
+		"Split Foyer"
+		"Two story"
+	*/
+
+SELECT DISTINCT overallqual AS distinct_overallqual
+	FROM property_sales;
+	-- No. of Distinct Categories: 10 Counts
+	/*
+		"Below Average"
+		"Average"
+		"Very Poor"
+		"Very Excellent"
+		"Fair"
+		"Excellent"
+		"Good"
+		"Poor"
+		"Very Good"
+		"Above Average"
+	*/
+ 
+SELECT DISTINCT overallcond AS distinct_overallcond
+	FROM property_sales;
+	-- No. of Distinct Categories: 9 Counts
+	/*
+		"Below Average"
+		"Average"
+		"Very Poor"
+		"Fair"
+		"Excellent"
+		"Good"
+		"Poor"
+		"Above Average"
+		"Very Good"
+	*/	
+
+
+
+
+
+------------- Chosen Categorical columns are as follows: mssubclass, bldgtype and housestyle
+------------- Chosen Target Variable: saleprice
+/*
+	Context:
+	The goal is to use mean encoding on the categories 'mssubclass,' 'bldgtype,' and 
+	'housestyle' to establish an average sale price with each unique category. This 
+	way, we can grasp and predict prices for various types of properties.
+*/
+
+
+
+
+
+------------------------------ MEAN ENCODING
+--------------- Establish mean of the target variable (saleprice) for each distinct category
+SELECT
+	id,
+	AVG(saleprice) OVER(PARTITION BY mssubclass) as mean_mssubclass,
+	AVG(saleprice) OVER(PARTITION BY bldgtype) as mean_bldgtype,
+	AVG(saleprice) OVER(PARTITION BY housestyle) as mean_housestyle
+	
+	FROM property_sales ORDER BY id;
+
+
+--------------- Encoding through the established MEAN
+SELECT
+	id,
+	mssubclass,
+	CASE 
+		WHEN mssubclass = '2-STORY PUD - 1946 & NEWER' 
+			THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+		WHEN mssubclass = '1-STORY PUD (Planned Unit Development) - 1946 & NEWER' 
+			THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+		WHEN mssubclass = '2 FAMILY CONVERSION - ALL STYLES AND AGES' 
+			THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+		WHEN mssubclass = 'DUPLEX - ALL STYLES AND AGES' 
+			THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+		WHEN mssubclass = 'PUD - MULTILEVEL - INCL SPLIT LEV/FOYER' 
+			THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+		WHEN mssubclass = 'SPLIT FOYER' 
+			THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+		WHEN mssubclass = '2-STORY 1945 & OLDER' 
+			THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+		WHEN mssubclass = '2-STORY 1946 & NEWER' 
+			THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+		WHEN mssubclass = '1-STORY 1946 & NEWER ALL STYLES' 
+			THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+		WHEN mssubclass = '2-1/2 STORY ALL AGES' 
+			THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+		WHEN mssubclass = '1-STORY W/FINISHED ATTIC ALL AGES' 
+			THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+		WHEN mssubclass = 'SPLIT OR MULTI-LEVEL' 
+			THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+		WHEN mssubclass = '1-STORY 1945 & OLDER' 
+			THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+		WHEN mssubclass = '1-1/2 STORY FINISHED ALL AGES' 
+			THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+		WHEN mssubclass = '1-1/2 STORY - UNFINISHED ALL AGES' 
+			THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+		ELSE NULL 
+		END AS mean_econded_mssubclass,
+	 
+	bldgtype,
+	CASE
+		WHEN bldgtype = 'Townhouse Inside Unit' 
+			THEN (AVG(saleprice) OVER(PARTITION BY bldgtype))
+		WHEN bldgtype = 'Duplex' 
+			THEN (AVG(saleprice) OVER(PARTITION BY bldgtype))
+		WHEN bldgtype = 'Two-family Conversion; originally built as one-family dwelling' 
+			THEN (AVG(saleprice) OVER(PARTITION BY bldgtype))
+		WHEN bldgtype = 'Single-family Detached' 
+			THEN (AVG(saleprice) OVER(PARTITION BY bldgtype))
+		WHEN bldgtype = 'Townhouse End Unit' 
+			THEN (AVG(saleprice) OVER(PARTITION BY bldgtype))
+		ELSE NULL END AS mean_econded_bldgtype,
+
+	housestyle,
+	CASE
+		WHEN housestyle = 'Two and one-half story: 2nd level finished' 
+			THEN (AVG(saleprice) OVER(PARTITION BY housestyle))
+		WHEN housestyle = 'One story' 
+			THEN (AVG(saleprice) OVER(PARTITION BY housestyle))
+		WHEN housestyle = 'One and one-half story: 2nd level unfinished' 
+			THEN (AVG(saleprice) OVER(PARTITION BY housestyle))
+		WHEN housestyle = 'One and one-half story: 2nd level finished' 
+			THEN (AVG(saleprice) OVER(PARTITION BY housestyle))
+		WHEN housestyle = 'Two and one-half story: 2nd level unfinished' 
+			THEN (AVG(saleprice) OVER(PARTITION BY housestyle))
+		WHEN housestyle = 'Split Level' 
+			THEN (AVG(saleprice) OVER(PARTITION BY housestyle))
+		WHEN housestyle = 'Split Foyer' 
+			THEN (AVG(saleprice) OVER(PARTITION BY housestyle))
+		WHEN housestyle = 'Two story' 
+			THEN (AVG(saleprice) OVER(PARTITION BY housestyle))
+		ELSE NULL END AS mean_econded_housestyle
+
+FROM property_sales;
+
+
+
+
+
+------------------------------ UPDATE TO TABLE
+-- UPDATE TABLE property_sales using UPSERT Technique
+--Review:
+/*
+	INSERT INTO tablename (columnname1, columnname2, columnname3,... )
+	SELECT ___, ___, ___,
+	FROM (another.tablename)
+	
+	ON CONFLICT ON CONSTRAINT ...
+	DO UPDATE SET ... = ...
+*/
+
+
+
+
+
+--------------- ADD COLUMNS TO TABLE
+ALTER TABLE property_sales	
+	ADD COLUMN	mean_encoded_mssubclass NUMERIC,
+	ADD COLUMN	mean_encoded_bldgtype NUMERIC,
+	ADD COLUMN	mean_encoded_housestyle NUMERIC;
+
+
+
+
+
+--------------- POPULATE ADDED COLUMNS
+
+INSERT INTO property_sales
+(
+	id,
+	mean_encoded_mssubclass,
+	mean_encoded_bldgtype,
+	mean_encoded_housestyle
+)
+
+SELECT
+	table_a.id,
+	table_b.mean_encoded_mssubclass AS mean_encoded_mssubclass,
+	table_b.mean_encoded_bldgtype AS mean_encoded_bldgtype,
+	table_b.mean_encoded_housestyle AS mean_encoded_housestyle
+	
+FROM 
+	property_sales as table_a
+	
+	INNER JOIN
+	(
+		SELECT
+			id,
+			mean_encoded_mssubclass,
+			mean_encoded_bldgtype,
+			mean_encoded_housestyle
+		FROM 
+		(
+			SELECT
+				id,
+				mssubclass,
+				CASE 
+					WHEN mssubclass = '2-STORY PUD - 1946 & NEWER' 
+						THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+					WHEN mssubclass = '1-STORY PUD (Planned Unit Development) - 1946 & NEWER' 
+						THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+					WHEN mssubclass = '2 FAMILY CONVERSION - ALL STYLES AND AGES' 
+						THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+					WHEN mssubclass = 'DUPLEX - ALL STYLES AND AGES' 
+						THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+					WHEN mssubclass = 'PUD - MULTILEVEL - INCL SPLIT LEV/FOYER' 
+						THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+					WHEN mssubclass = 'SPLIT FOYER' 
+						THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+					WHEN mssubclass = '2-STORY 1945 & OLDER' 
+						THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+					WHEN mssubclass = '2-STORY 1946 & NEWER' 
+						THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+					WHEN mssubclass = '1-STORY 1946 & NEWER ALL STYLES' 
+						THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+					WHEN mssubclass = '2-1/2 STORY ALL AGES' 
+						THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+					WHEN mssubclass = '1-STORY W/FINISHED ATTIC ALL AGES' 
+						THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+					WHEN mssubclass = 'SPLIT OR MULTI-LEVEL' 
+						THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+					WHEN mssubclass = '1-STORY 1945 & OLDER' 
+						THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+					WHEN mssubclass = '1-1/2 STORY FINISHED ALL AGES' 
+						THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+					WHEN mssubclass = '1-1/2 STORY - UNFINISHED ALL AGES' 
+						THEN (AVG(saleprice) OVER(PARTITION BY mssubclass))
+					ELSE NULL 
+					END AS mean_encoded_mssubclass,
+
+				bldgtype,
+				CASE
+					WHEN bldgtype = 'Townhouse Inside Unit' 
+						THEN (AVG(saleprice) OVER(PARTITION BY bldgtype))
+					WHEN bldgtype = 'Duplex' 
+						THEN (AVG(saleprice) OVER(PARTITION BY bldgtype))
+					WHEN bldgtype = 'Two-family Conversion; originally built as one-family dwelling' 
+						THEN (AVG(saleprice) OVER(PARTITION BY bldgtype))
+					WHEN bldgtype = 'Single-family Detached' 
+						THEN (AVG(saleprice) OVER(PARTITION BY bldgtype))
+					WHEN bldgtype = 'Townhouse End Unit' 
+						THEN (AVG(saleprice) OVER(PARTITION BY bldgtype))
+					ELSE NULL END AS mean_encoded_bldgtype,
+
+				housestyle,
+				CASE
+					WHEN housestyle = 'Two and one-half story: 2nd level finished' 
+						THEN (AVG(saleprice) OVER(PARTITION BY housestyle))
+					WHEN housestyle = 'One story' 
+						THEN (AVG(saleprice) OVER(PARTITION BY housestyle))
+					WHEN housestyle = 'One and one-half story: 2nd level unfinished' 
+						THEN (AVG(saleprice) OVER(PARTITION BY housestyle))
+					WHEN housestyle = 'One and one-half story: 2nd level finished' 
+						THEN (AVG(saleprice) OVER(PARTITION BY housestyle))
+					WHEN housestyle = 'Two and one-half story: 2nd level unfinished' 
+						THEN (AVG(saleprice) OVER(PARTITION BY housestyle))
+					WHEN housestyle = 'Split Level' 
+						THEN (AVG(saleprice) OVER(PARTITION BY housestyle))
+					WHEN housestyle = 'Split Foyer' 
+						THEN (AVG(saleprice) OVER(PARTITION BY housestyle))
+					WHEN housestyle = 'Two story' 
+						THEN (AVG(saleprice) OVER(PARTITION BY housestyle))
+					ELSE NULL END AS mean_encoded_housestyle
+
+			FROM property_sales
+		)
+	) as table_b 
+	ON table_a.id = table_b.id
+
+ON CONFLICT ON CONSTRAINT q_id
+DO UPDATE SET 
+    mean_encoded_mssubclass = EXCLUDED.mean_encoded_mssubclass,
+    mean_encoded_bldgtype = EXCLUDED.mean_encoded_bldgtype,
+	mean_encoded_housestyle = EXCLUDED.mean_encoded_housestyle;
+
+
+
+
+
+
+--------------- CONFIRM & VALIDATE ADDED COLUMNS
+SELECT 
+	id,
+	mssubclass,
+	mean_encoded_mssubclass,
+	bldgtype,
+	mean_encoded_bldgtype,
+	housestyle,
+	mean_encoded_housestyle
+	
+	FROM property_sales ORDER BY id;
+	
+	
+	
+	
+--------------- DISPLAY ALL VALUES
+SELECT * FROM property_sales ORDER BY id;

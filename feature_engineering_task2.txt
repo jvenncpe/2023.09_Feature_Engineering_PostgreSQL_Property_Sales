@@ -1,0 +1,285 @@
+/*
+	Task2: Perform Ordinal or Label encoding on one or more Categorical Variables in the dataset
+	Export: feature_engineering _task2.txt
+*/
+
+
+
+
+
+------------- Determine categorical variables for Ordinal or Label Encoding
+SELECT DISTINCT mssubclass AS distinct_mssubclass
+	FROM property_sales;
+	-- No. of Distinct Categories: 15 Counts
+	/*
+		"2-STORY PUD - 1946 & NEWER"
+		"1-STORY PUD (Planned Unit Development) - 1946 & NEWER"
+		"2 FAMILY CONVERSION - ALL STYLES AND AGES"
+		"DUPLEX - ALL STYLES AND AGES"
+		"PUD - MULTILEVEL - INCL SPLIT LEV/FOYER"
+		"SPLIT FOYER"
+		"2-STORY 1945 & OLDER"
+		"2-STORY 1946 & NEWER"
+		"1-STORY 1946 & NEWER ALL STYLES"
+		"2-1/2 STORY ALL AGES"
+		"1-STORY W/FINISHED ATTIC ALL AGES"
+		"SPLIT OR MULTI-LEVEL"
+		"1-STORY 1945 & OLDER"
+		"1-1/2 STORY FINISHED ALL AGES"
+		"1-1/2 STORY - UNFINISHED ALL AGES"
+	*/
+
+
+SELECT DISTINCT lotshape AS distinct_lotshape
+	FROM property_sales;
+	-- No. of Distinct Categories: 4 Counts
+	/*
+		"Moderately Irregular"
+		"Slightly irregular"
+		"Regular"
+		"Irregular"
+	*/
+	
+
+SELECT DISTINCT landcontour AS distinct_landcontour
+	FROM property_sales;
+	-- No. of Distinct Categories: 4 Counts
+	/*
+		"Depression"
+		"Hillside - Significant slope from side to side"
+		"Banked - Quick and significant rise from street grade to building"
+		"Near Flat/Level"
+	*/
+
+SELECT DISTINCT landslope AS distinct_landslope
+	FROM property_sales;
+	-- No. of Distinct Categories: 3 Counts
+	/*
+		"Gentle slope"
+		"Moderate Slope"
+		"Severe Slope"
+	*/
+
+SELECT DISTINCT bldgtype AS distinct_bldgtype
+	FROM property_sales;
+	-- No. of Distinct Categories: 5 Counts
+	/*
+		"Townhouse Inside Unit"
+		"Duplex"
+		"Two-family Conversion; originally built as one-family dwelling"
+		"Single-family Detached"
+		"Townhouse End Unit"	
+	*/
+
+SELECT DISTINCT housestyle AS distinct_housestyle
+	FROM property_sales;
+	-- No. of Distinct Categories: 8 Counts
+	/*
+		"Two and one-half story: 2nd level finished"
+		"One story"
+		"One and one-half story: 2nd level unfinished"
+		"One and one-half story: 2nd level finished"
+		"Two and one-half story: 2nd level unfinished"
+		"Split Level"
+		"Split Foyer"
+		"Two story"
+	*/
+
+SELECT DISTINCT overallqual AS distinct_overallqual
+	FROM property_sales;
+	-- No. of Distinct Categories: 10 Counts
+	/*
+		"Below Average"
+		"Average"
+		"Very Poor"
+		"Very Excellent"
+		"Fair"
+		"Excellent"
+		"Good"
+		"Poor"
+		"Very Good"
+		"Above Average"
+	*/
+ 
+SELECT DISTINCT overallcond AS distinct_overallcond
+	FROM property_sales;
+	-- No. of Distinct Categories: 9 Counts
+	/*
+		"Below Average"
+		"Average"
+		"Very Poor"
+		"Fair"
+		"Excellent"
+		"Good"
+		"Poor"
+		"Above Average"
+		"Very Good"
+	*/	
+
+
+
+
+
+------------- Chosen categorical columns are as follows: overallqual and overallcond
+/*
+	Context:
+	We're using ordinal or label encoding on 'overallqual' and 'overallcond' columns. 
+	This means assigning numerical values to represent the quality and condition of 
+	properties, making it easier for the computer to analyze and predict.
+*/
+
+
+
+
+
+------------------------------ ORDINAL OR LABEL ENCODING
+SELECT
+	  id,
+	  
+	overallqual,
+	CASE
+		WHEN overallqual = 'Very Poor' THEN 1
+    	WHEN overallqual = 'Poor' THEN 2
+    	WHEN overallqual = 'Below Average' THEN 3
+    	WHEN overallqual = 'Average' THEN 4
+    	WHEN overallqual = 'Above Average' THEN 5
+		WHEN overallqual = 'Fair' THEN 6
+		WHEN overallqual = 'Good' THEN 7
+		WHEN overallqual = 'Very Good' THEN 8
+		WHEN overallqual = 'Excellent' THEN 9
+		WHEN overallqual = 'Very Excellent' THEN 10
+		ELSE NULL
+  		END AS ordinal_encoded_overallqual,
+		
+	overallcond,
+	CASE 
+		WHEN overallcond = 'Very Poor' THEN 1
+		WHEN overallcond = 'Poor' THEN 2
+		WHEN overallcond = 'Below Average' THEN 3
+		WHEN overallcond = 'Average' THEN 4
+		WHEN overallcond = 'Above Average' THEN 5
+		WHEN overallcond = 'Fair' THEN 6
+		WHEN overallcond = 'Good' THEN 7
+		WHEN overallcond = 'Very Good' THEN 8
+		WHEN overallcond = 'Excellent' THEN 9
+		ELSE NULL
+		END AS ordinal_encoded_overallcond
+
+FROM
+  property_sales;
+
+
+
+
+
+------------------------------ UPDATE TO TABLE
+-- UPDATE TABLE property_sales using UPSERT Technique
+--Review:
+/*
+	INSERT INTO tablename (columnname1, columnname2, columnname3,... )
+	SELECT ___, ___, ___,
+	FROM (another.tablename)
+	
+	ON CONFLICT ON CONSTRAINT ...
+	DO UPDATE SET ... = ...
+*/
+
+
+
+
+
+--------------- ADD COLUMNS TO TABLE
+ALTER TABLE property_sales	
+	ADD COLUMN	ordinal_encoded_overallqual INTEGER,
+	ADD COLUMN	ordinal_encoded_overallcond INTEGER;
+
+
+
+
+
+--------------- POPULATE ADDED COLUMNS
+INSERT INTO property_sales
+(
+	id,
+	ordinal_encoded_overallqual,
+	ordinal_encoded_overallcond
+)
+
+SELECT
+	table_a.id,
+	table_b.ordinal_encoded_overallqual AS ordinal_encoded_overallqual,
+	table_b.ordinal_encoded_overallcond AS ordinal_encoded_overallcond
+	
+FROM 
+	property_sales as table_a
+	
+	INNER JOIN
+	(
+		SELECT
+			id,
+			ordinal_encoded_overallqual,
+			ordinal_encoded_overallcond
+		FROM 
+		(
+			SELECT
+				id,
+
+				overallqual,
+				CASE
+					WHEN overallqual = 'Very Poor' THEN 1
+					WHEN overallqual = 'Poor' THEN 2
+					WHEN overallqual = 'Below Average' THEN 3
+					WHEN overallqual = 'Average' THEN 4
+					WHEN overallqual = 'Above Average' THEN 5
+					WHEN overallqual = 'Fair' THEN 6
+					WHEN overallqual = 'Good' THEN 7
+					WHEN overallqual = 'Very Good' THEN 8
+					WHEN overallqual = 'Excellent' THEN 9
+					WHEN overallqual = 'Very Excellent' THEN 10
+					ELSE NULL
+					END AS ordinal_encoded_overallqual,
+
+				overallcond,
+				CASE 
+					WHEN overallcond = 'Very Poor' THEN 1
+					WHEN overallcond = 'Poor' THEN 2
+					WHEN overallcond = 'Below Average' THEN 3
+					WHEN overallcond = 'Average' THEN 4
+					WHEN overallcond = 'Above Average' THEN 5
+					WHEN overallcond = 'Fair' THEN 6
+					WHEN overallcond = 'Good' THEN 7
+					WHEN overallcond = 'Very Good' THEN 8
+					WHEN overallcond = 'Excellent' THEN 9
+					ELSE NULL
+					END AS ordinal_encoded_overallcond
+
+			FROM
+			  property_sales
+		)
+	) as table_b 
+	ON table_a.id = table_b.id
+
+ON CONFLICT ON CONSTRAINT q_id
+DO UPDATE SET 
+    ordinal_encoded_overallqual = EXCLUDED.ordinal_encoded_overallqual,
+    ordinal_encoded_overallcond = EXCLUDED.ordinal_encoded_overallcond;
+
+
+
+
+
+--------------- CONFIRM & VALIDATE ADDED COLUMNS
+SELECT 
+	id,
+	overallqual,
+	ordinal_encoded_overallqual,
+	overallcond,
+	ordinal_encoded_overallcond
+	
+	FROM property_sales ORDER BY id;
+	
+	
+	
+	
+--------------- DISPLAY ALL VALUES
+SELECT * FROM property_sales ORDER BY id;

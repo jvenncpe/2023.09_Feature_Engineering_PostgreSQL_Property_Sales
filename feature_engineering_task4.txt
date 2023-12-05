@@ -1,0 +1,487 @@
+/*
+	Task4: Perform Mean Normalization on all the numeric variables to rescale these variables (you may add new columns for this)
+	Export: feature_engineering _task4.txt
+*/
+
+
+
+
+
+------------- Determine numeric variables for Mean Normalization
+/*
+	Numeric Variables:
+		lotfrontage
+		lotarea
+		garagearea
+		grlivarea
+		totalbsmtsf
+		saleprice
+
+*/
+
+/*
+	Context:
+	The selected numeric variables will undergo mean normalization, transforming 
+	and rescaling these values to a range of -1 to 1. This makes it easier to 
+	compare and use them for different kinds of analysis and machine learning.
+*/
+
+
+
+
+
+------------------------------ MEAN NORMALIZATION
+-- X' = ( x - MEAN(X)) / ( MAX(X) - MIN(X) )
+--- Sample Display to be used for Mean Normalization
+----  AVG(), MIN(), MAX()
+----- SCALE LIMIT: -1 to 1
+SELECT
+    main_table.id,
+	
+	lotarea,
+	MAX(lotarea)OVER() AS max_lotarea,
+	MIN(lotarea)OVER() AS min_lotarea,
+	
+	(lotarea - (AVG(lotarea) OVER())) 
+		/ ((MAX(lotarea) OVER()) - (MIN(lotarea) OVER())) 
+			AS norm_lotarea,
+	
+	/* 
+		Used subquery for lotfrontage so that I wont drop the other column when 
+		I make exceptions/filters in lotfrontage calculations for "NA" values.
+	*/
+	
+	sub_table.lotfrontage,
+    sub_table.max_lotfrontage,
+    sub_table.min_lotfrontage,
+	sub_table.norm_lotfrontage,
+
+	
+	garagearea,
+	MAX(garagearea)OVER() AS max_garagearea,
+	MIN(garagearea)OVER() AS min_garagearea,
+
+	(garagearea - (AVG(garagearea) OVER())) 
+		/ ((MAX(garagearea) OVER()) - (MIN(garagearea) OVER())) 
+			AS norm_garagearea,
+
+	grlivarea,
+	MAX(grlivarea)OVER() AS max_grlivarea,
+	MIN(grlivarea)OVER() AS min_grlivarea,
+
+	(grlivarea - (AVG(grlivarea) OVER())) 
+		/ ((MAX(grlivarea) OVER()) - (MIN(grlivarea) OVER())) 
+			AS norm_grlivarea,
+
+	totalbsmtsf,
+	MAX(totalbsmtsf)OVER() AS max_totalbsmtsf,
+	MIN(totalbsmtsf)OVER() AS min_totalbsmtsf,
+
+	(totalbsmtsf - (AVG(totalbsmtsf) OVER())) 
+		/ ((MAX(totalbsmtsf) OVER()) - (MIN(totalbsmtsf) OVER())) 
+			AS norm_totalbsmtsf,
+
+	saleprice,
+	MAX(saleprice)OVER() AS max_saleprice,
+	MIN(saleprice)OVER() AS min_saleprice,
+
+	(saleprice - (AVG(saleprice) OVER())) 
+		/ ((MAX(saleprice) OVER()) - (MIN(saleprice) OVER())) 
+			AS norm_saleprice
+
+			
+FROM
+    property_sales AS main_table
+    INNER JOIN 
+	(
+		SELECT
+			main_table.id,
+			CASE
+				WHEN sub_table.lotfrontage IS NULL THEN 'NA'
+				ELSE sub_table.lotfrontage::VARCHAR
+			END AS lotfrontage,
+			sub_table.max_lotfrontage,
+			sub_table.min_lotfrontage,
+			sub_table.norm_lotfrontage
+
+		FROM
+			property_sales AS main_table
+			LEFT JOIN (
+				SELECT
+					id,
+					lotfrontage::numeric,
+					MAX(lotfrontage::numeric) OVER () AS max_lotfrontage,
+					MIN(lotfrontage::numeric) OVER () AS min_lotfrontage,
+					(lotfrontage::numeric - (AVG(lotfrontage::numeric) OVER ()))
+						/ ((MAX(lotfrontage::numeric) OVER ()) - (MIN(lotfrontage::numeric) OVER ()))
+							AS norm_lotfrontage
+				FROM 
+					property_sales
+				WHERE 
+					lotfrontage ~* '^[0-9\.]+$'
+				ORDER BY
+					id
+			) sub_table
+			ON main_table.id = sub_table.id
+		) sub_table
+ON main_table.id = sub_table.id;
+
+
+
+
+
+------------- To verify rescaling from -1 to 1
+SELECT
+	subquery.id,
+	
+	subquery.lotfrontage,
+	MAX(subquery.norm_lotfrontage)OVER() AS max_norm_lotfrontage,
+	MIN(subquery.norm_lotfrontage)OVER() AS min_norm_lotfrontage,
+	
+	subquery.lotarea,
+	MAX(subquery.norm_lotarea)OVER() AS max_norm_lotarea,
+	MIN(subquery.norm_lotarea)OVER() AS min_norm_lotarea,
+
+	subquery.garagearea,
+	MAX(subquery.norm_garagearea)OVER() AS max_norm_garagearea,
+	MIN(subquery.norm_garagearea)OVER() AS min_norm_garagearea,
+	
+	subquery.grlivarea,
+	MAX(subquery.norm_grlivarea)OVER() AS max_norm_grlivarea,
+	MIN(subquery.norm_grlivarea)OVER() AS min_norm_grlivarea,
+	
+	subquery.totalbsmtsf,
+	MAX(subquery.norm_totalbsmtsf)OVER() AS max_norm_totalbsmtsf,
+	MIN(subquery.norm_totalbsmtsf)OVER() AS min_norm_totalbsmtsf,
+	
+	subquery.saleprice,
+	MAX(subquery.norm_saleprice)OVER() AS max_norm_saleprice,
+	MIN(subquery.norm_saleprice)OVER() AS min_norm_saleprice
+	
+	FROM
+	(
+		SELECT
+			main_table.id,
+
+			lotarea,
+			MAX(lotarea)OVER() AS max_lotarea,
+			MIN(lotarea)OVER() AS min_lotarea,
+
+			(lotarea - (AVG(lotarea) OVER())) 
+				/ ((MAX(lotarea) OVER()) - (MIN(lotarea) OVER())) 
+					AS norm_lotarea,
+
+			/* 
+				Used subquery for lotfrontage so that I wont drop the other column when 
+				I make exceptions/filters in lotfrontage calculations for "NA" values.
+			*/
+
+			sub_table.lotfrontage,
+			sub_table.max_lotfrontage,
+			sub_table.min_lotfrontage,
+			sub_table.norm_lotfrontage,
+
+
+			garagearea,
+			MAX(garagearea)OVER() AS max_garagearea,
+			MIN(garagearea)OVER() AS min_garagearea,
+
+			(garagearea - (AVG(garagearea) OVER())) 
+				/ ((MAX(garagearea) OVER()) - (MIN(garagearea) OVER())) 
+					AS norm_garagearea,
+
+			grlivarea,
+			MAX(grlivarea)OVER() AS max_grlivarea,
+			MIN(grlivarea)OVER() AS min_grlivarea,
+
+			(grlivarea - (AVG(grlivarea) OVER())) 
+				/ ((MAX(grlivarea) OVER()) - (MIN(grlivarea) OVER())) 
+					AS norm_grlivarea,
+
+			totalbsmtsf,
+			MAX(totalbsmtsf)OVER() AS max_totalbsmtsf,
+			MIN(totalbsmtsf)OVER() AS min_totalbsmtsf,
+
+			(totalbsmtsf - (AVG(totalbsmtsf) OVER())) 
+				/ ((MAX(totalbsmtsf) OVER()) - (MIN(totalbsmtsf) OVER())) 
+					AS norm_totalbsmtsf,
+
+			saleprice,
+			MAX(saleprice)OVER() AS max_saleprice,
+			MIN(saleprice)OVER() AS min_saleprice,
+
+			(saleprice - (AVG(saleprice) OVER())) 
+				/ ((MAX(saleprice) OVER()) - (MIN(saleprice) OVER())) 
+					AS norm_saleprice
+
+
+		FROM
+			property_sales AS main_table
+			INNER JOIN 
+			(
+				SELECT
+					main_table.id,
+					CASE
+						WHEN sub_table.lotfrontage IS NULL THEN 'NA'
+						ELSE sub_table.lotfrontage::VARCHAR
+					END AS lotfrontage,
+					sub_table.max_lotfrontage,
+					sub_table.min_lotfrontage,
+					sub_table.norm_lotfrontage
+
+				FROM
+					property_sales AS main_table
+					LEFT JOIN (
+						SELECT
+							id,
+							lotfrontage::numeric,
+							MAX(lotfrontage::numeric) OVER () AS max_lotfrontage,
+							MIN(lotfrontage::numeric) OVER () AS min_lotfrontage,
+							(lotfrontage::numeric - (AVG(lotfrontage::numeric) OVER ()))
+								/ ((MAX(lotfrontage::numeric) OVER ()) - (MIN(lotfrontage::numeric) OVER ()))
+									AS norm_lotfrontage
+						FROM 
+							property_sales
+						WHERE 
+							lotfrontage ~* '^[0-9\.]+$'
+						ORDER BY
+							id
+					) sub_table
+					ON main_table.id = sub_table.id
+				) sub_table
+		ON main_table.id = sub_table.id
+	)subquery
+	
+	WHERE	
+		subquery.norm_lotfrontage < -1 
+		OR subquery.norm_lotfrontage > 1
+		OR subquery.norm_lotarea < -1 
+		OR subquery.norm_lotarea > 1
+		OR subquery.norm_garagearea < -1 
+		OR subquery.norm_garagearea > 1
+		OR subquery.norm_grlivarea < -1 
+		OR subquery.norm_grlivarea > 1
+		OR subquery.norm_totalbsmtsf < -1 
+		OR subquery.norm_totalbsmtsf > 1
+		OR subquery.norm_saleprice < -1 
+		OR subquery.norm_saleprice > 1;
+		
+		
+		
+		
+		
+------------------------------ UPDATE TO TABLE
+-- UPDATE TABLE property_sales using UPSERT Technique
+--Review:
+/*
+	INSERT INTO tablename (columnname1, columnname2, columnname3,... )
+	SELECT ___, ___, ___,
+	FROM (another.tablename)
+	
+	ON CONFLICT ON CONSTRAINT ...
+	DO UPDATE SET ... = ...
+*/
+
+
+
+
+
+--------------- ADD COLUMNS TO TABLE
+ALTER TABLE property_sales
+	ADD COLUMN norm_lotfrontage NUMERIC,
+	ADD COLUMN norm_lotarea NUMERIC,
+	ADD COLUMN norm_garagearea NUMERIC,
+	ADD COLUMN norm_grlivarea NUMERIC,
+	ADD COLUMN norm_totalbsmtsf NUMERIC,
+	ADD COLUMN norm_saleprice NUMERIC;
+
+
+
+
+
+--------------- POPULATE ADDED COLUMNS
+
+INSERT INTO property_sales
+(
+	id,
+	norm_lotfrontage,
+	norm_lotarea,
+	norm_garagearea,
+	norm_grlivarea,
+	norm_totalbsmtsf,
+	norm_saleprice
+)
+
+SELECT
+	table_a.id,
+	table_b.norm_lotfrontage AS norm_lotfrontage,
+	table_b.norm_lotarea AS norm_lotarea,
+	table_b.norm_garagearea AS norm_garagearea,
+	table_b.norm_grlivarea AS norm_grlivarea,
+	table_b.norm_totalbsmtsf AS norm_totalbsmtsf,
+	table_b.norm_saleprice AS norm_saleprice
+	
+FROM 
+	property_sales as table_a
+	
+	INNER JOIN
+	(
+		SELECT
+			id,
+			norm_lotfrontage,
+			norm_lotarea,
+			norm_garagearea,
+			norm_grlivarea,
+			norm_totalbsmtsf,
+			norm_saleprice
+		FROM 
+		(
+			SELECT
+				main_table.id,
+
+				lotarea,
+				MAX(lotarea)OVER() AS max_lotarea,
+				MIN(lotarea)OVER() AS min_lotarea,
+
+				(lotarea - (AVG(lotarea) OVER())) 
+					/ ((MAX(lotarea) OVER()) - (MIN(lotarea) OVER())) 
+						AS norm_lotarea,
+
+				/* 
+					Used subquery for lotfrontage so that I wont drop the other column when 
+					I make exceptions/filters in lotfrontage calculations for "NA" values.
+				*/
+
+				sub_table.lotfrontage,
+				sub_table.max_lotfrontage,
+				sub_table.min_lotfrontage,
+				sub_table.norm_lotfrontage,
+
+
+				garagearea,
+				MAX(garagearea)OVER() AS max_garagearea,
+				MIN(garagearea)OVER() AS min_garagearea,
+
+				(garagearea - (AVG(garagearea) OVER())) 
+					/ ((MAX(garagearea) OVER()) - (MIN(garagearea) OVER())) 
+						AS norm_garagearea,
+
+				grlivarea,
+				MAX(grlivarea)OVER() AS max_grlivarea,
+				MIN(grlivarea)OVER() AS min_grlivarea,
+
+				(grlivarea - (AVG(grlivarea) OVER())) 
+					/ ((MAX(grlivarea) OVER()) - (MIN(grlivarea) OVER())) 
+						AS norm_grlivarea,
+
+				totalbsmtsf,
+				MAX(totalbsmtsf)OVER() AS max_totalbsmtsf,
+				MIN(totalbsmtsf)OVER() AS min_totalbsmtsf,
+
+				(totalbsmtsf - (AVG(totalbsmtsf) OVER())) 
+					/ ((MAX(totalbsmtsf) OVER()) - (MIN(totalbsmtsf) OVER())) 
+						AS norm_totalbsmtsf,
+
+				saleprice,
+				MAX(saleprice)OVER() AS max_saleprice,
+				MIN(saleprice)OVER() AS min_saleprice,
+
+				(saleprice - (AVG(saleprice) OVER())) 
+					/ ((MAX(saleprice) OVER()) - (MIN(saleprice) OVER())) 
+						AS norm_saleprice
+
+
+			FROM
+				property_sales AS main_table
+				INNER JOIN 
+				(
+					SELECT
+						main_table.id,
+						CASE
+							WHEN sub_table.lotfrontage IS NULL THEN 'NA'
+							ELSE sub_table.lotfrontage::VARCHAR
+						END AS lotfrontage,
+						sub_table.max_lotfrontage,
+						sub_table.min_lotfrontage,
+						sub_table.norm_lotfrontage
+
+					FROM
+						property_sales AS main_table
+						LEFT JOIN (
+							SELECT
+								id,
+								lotfrontage::numeric,
+								MAX(lotfrontage::numeric) OVER () AS max_lotfrontage,
+								MIN(lotfrontage::numeric) OVER () AS min_lotfrontage,
+								(lotfrontage::numeric - (AVG(lotfrontage::numeric) OVER ()))
+									/ ((MAX(lotfrontage::numeric) OVER ()) - (MIN(lotfrontage::numeric) OVER ()))
+										AS norm_lotfrontage
+							FROM 
+								property_sales
+							WHERE 
+								lotfrontage ~* '^[0-9\.]+$'
+							ORDER BY
+								id
+						) sub_table
+						ON main_table.id = sub_table.id
+					) sub_table
+			ON main_table.id = sub_table.id
+		)
+	) as table_b 
+	ON table_a.id = table_b.id
+
+ON CONFLICT ON CONSTRAINT q_id
+DO UPDATE SET 
+    norm_lotfrontage = EXCLUDED.norm_lotfrontage,
+    norm_lotarea = EXCLUDED.norm_lotarea,
+    norm_garagearea = EXCLUDED.norm_garagearea,
+    norm_grlivarea = EXCLUDED.norm_grlivarea,
+	norm_totalbsmtsf = EXCLUDED.norm_totalbsmtsf,
+	norm_saleprice = EXCLUDED.norm_saleprice;
+	
+	
+	
+	
+	
+--------------- CONFIRM & VALIDATE ADDED COLUMNS
+SELECT 
+	id,
+	
+	lotfrontage,
+	norm_lotfrontage,
+	MAX(norm_lotfrontage)OVER() AS max_norm_lotfrontage,
+	MIN(norm_lotfrontage)OVER() AS min_norm_lotfrontage,
+	
+	lotarea,
+	norm_lotarea,
+	MAX(norm_lotarea)OVER() AS max_norm_lotarea,
+	MIN(norm_lotarea)OVER() AS min_norm_lotarea,
+	
+	garagearea,
+	norm_garagearea,
+	MAX(norm_garagearea)OVER() AS max_norm_garagearea,
+	MIN(norm_garagearea)OVER() AS min_norm_garagearea,
+	
+	grlivarea,
+	norm_grlivarea,
+	MAX(norm_grlivarea)OVER() AS max_norm_grlivarea,
+	MIN(norm_grlivarea)OVER() AS min_norm_grlivarea,
+	
+	totalbsmtsf,
+	norm_totalbsmtsf,
+	MAX(norm_totalbsmtsf)OVER() AS max_norm_totalbsmtsf,
+	MIN(norm_totalbsmtsf)OVER() AS min_norm_totalbsmtsf,
+	
+	saleprice,
+	norm_saleprice,
+	MAX(norm_saleprice)OVER() AS max_std_saleprice,
+	MIN(norm_saleprice)OVER() AS min_std_saleprice
+	
+	FROM property_sales ORDER BY id;
+	
+	
+	
+	
+	
+--------------- DISPLAY ALL VALUES
+SELECT * FROM property_sales ORDER BY id;

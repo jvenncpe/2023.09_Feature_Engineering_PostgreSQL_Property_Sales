@@ -9,10 +9,11 @@ Capstone project output from "SP701 SQL for Data Engineering" facilitated by Pro
 
 ## Activity
 Perform the following Feature Engineering tasks:
+	
 	Task1: Perform One-Hot Encoding on the variable on one or more Categorical Variables in the dataset
-	Export: feature_engineering_task1.txt
-
-	Task2: Perform Ordinal or Label encoding on one or more Categorical Variables in the dataset
+	Export: feature_engineering_task1.txt 
+ 
+ 	Task2: Perform Ordinal or Label encoding on one or more Categorical Variables in the dataset
 	Export: feature_engineering _task2.txt
 
 	Task3: Perform Mean encoding on one or more Categorical Variables in the dataset (hint: you may want to use OVER() and PARTITION() commands)
@@ -26,32 +27,183 @@ Perform the following Feature Engineering tasks:
 
 ## Dataset Context
 
-I used data from a food industry company, which includes various Excel files as follows:
+The dataset describes the sale of individual residential property in Ames, Iowa from 2006 to 2010. The data set contains 2930 observations and originally has a large number of explanatory variables (23 nominal, 23 ordinal, 14 discrete, and 20 continuous) involved in assessing home values.
 
-![image]
+## Methodology & Results
+---
+### Task1: Perform One-Hot Encoding on the variable on one or more Categorical Variables in the dataset
+- One-Hot Encoding Output 
 
-- The first dataset contains invoice details with columns: "Order ID," "Date," "Meal ID," "Company ID," "Date of Meal," "Participants," "Meal Price," and "Type of Meal."
-- The second dataset, named "Order Leads," consists of columns such as "Order ID," "Company ID," "Company Name," "Date," "Order Value," and "Converted."
-- The third dataset, named "Sales Team," comprises columns like "Sales Rep," "Sales Rep ID," "Company Name," and "Company ID."
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/fd3b9719-86a2-481a-822d-c9a5891a6938)
+> Steps Below:
+---
 
-These datasets will be utilized to assess sales performance by year, segment customers, and categorize sales team members based on performance, distinguishing between top and bottom performers.
+- Determine categorical variables and no. of ditinct values to be used for One-Hot Encoding such as below:
 
-## Methodology
-The sales performance analysis was carried out by creating pivot tables and measuring columns in the following steps:
-- A pivot table was generated from OrderLeands.xlsx, featuring columns: "Year," "Not Converted," and "Count of Company Id."
-- This pivot table data was then used to create another table containing columns: "Year," "Not Converted," "Count of Company Id," "Converted," "Conversion Rate," and "YTY." The "Converted" column was calculated by subtracting the "Count of Company Id" from the "Not Converted" values.
-- To calculate the conversion rate, we compared the converted values of the current year with the previous year, minus 1, to ascertain the percentage increase or decrease. The "YTY" column represents the yearly change in the conversion rate.
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/f01ca7ac-cae6-45bc-ab61-59d3302a3e50)
+
+- CATEGORICAL COLUMNS TO USE: lotshape, landcontour, landslope
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/8f6e21e9-bdf1-443e-872e-e3e90714341f)
+
+- Executing a SELECT-FROM query to perform one-hot encoding.
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/77add8ea-9c31-4bc9-839e-7f9cae054e64)
+
+- Update table by adding columns for one-hot encoding storage.
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/78c2d929-071e-4f84-8029-0d070296d049)
+
+- Populate the added columns from the select query that was used to perform one-hot encoding.
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/0a86fd7a-39b5-4cac-a4cf-97a053a7b7a3)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/d90cdb77-967b-4496-a454-78665c423a7b)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/dee55179-bf10-4467-8003-1869deb636c0)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/49b077b3-d278-4fff-a468-c09cfa647012)
+
+- Confirm and validate the values in the added columns
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/d0f93efa-b514-4b80-9c71-781d8a585a3d)
+
+- Display all values
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/356e5d51-f931-46b0-bc21-48e026501ca1)
 
 
-For RFM Segmentation, the process included creating multiple pivot tables and interconnecting them using "index-match syntax" in the following manner:
-- Generated a pivot table from Invoices.xlsx containing "Company ID, Count of Order Id, Max of Order Date, Average of Meal Price," in a new tab for RFM Segmentation Analysis.
-- We then added a Sales Representative Column beside the RFM segmentation column by using "index-match" to refer to SalesTeam.xlsx, matching each customer with their assigned sales rep for further sales analysis.
-- From the pivot table made using 'index-match' for sales reps, we made a new pivot table to help us sort sales reps by 'Sales Rep Name,' 'At Risk/Need Attrition,' 'Immediate Attention,' 'Loyal Customers,' 'Top Customers,' and 'Grand Total' to analyze their performance.
-- By utilizing the newly extracted pivot table, we conduct Sales Representative Segmentation to identifying top and bottom performers based on this information.
 
-This structured methodology enables detailed examination of sales metrics and effective segmentation of sales representatives to pinpoint top and underperforming individuals.
+---
+### Task2: Perform Ordinal or Label encoding on one or more Categorical Variables in the dataset
 
-## Results and Discussion
+- Ordinal or Label Encoding Output 
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/157972e6-0460-41e9-b76e-49cee1e30d0c)
+> Steps Below:
+---
+
+- Determine categorical variables and no. of ditinct values to be used for Ordinal or Label Encoding such as below:
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/a7a41739-6207-4420-9772-a33c5a8893e2)
+
+- CATEGORICAL COLUMNS TO USE: overallqual and overallcond
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/21b16c1f-74c1-49c5-be0b-4d5e7d26c0ac)
+
+- Executing a SELECT-FROM query to perform ordinal or label encoding.
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/ddb24d36-f33c-4257-8dfe-7e8db8a28554)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/29cd7f14-4bb1-479a-9dd6-e0b1188998c4)
+
+- Update table by adding columns for ordinal or label encoding storage.
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/cbad12ed-d04c-4ed9-aa6b-098f6bb7c7d0)
+
+- Populate the added columns from the select query that was used to perform ordinal or label encoding.
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/ec9b4dd0-3e7a-473c-b261-438d82735dc6)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/9c100a03-4026-4339-a2fc-7a5dcbc2ceed)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/6e117a0e-3e12-4401-bd57-a23ec8bf4b8c)
+
+- Confirm and validate the values in the added columns, then display all values
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/423c373a-6a47-4758-a5dd-06eba66660c0)
+
+---
+### Task3: Perform Mean encoding on one or more Categorical Variables in the dataset (hint: you may want to use OVER() and PARTITION() commands)
+- Mean Encoding Output 
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/8a396e34-7b23-4cea-8a59-d902defb10e8)
+> Steps Below:
+---
+
+- Determine categorical variables for Mean encoding and Target Variable to Predict/Analyze
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/f29b2b22-dc6d-4d22-a8e8-7bbadc7dbed7)
+
+- CATEGORICAL COLUMN TO USE: mssubclass, bldgtype and housestyle
+- CHOSEN TARGET VARIABLE: saleprice
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/e28e5895-a1b3-4a1c-8220-0452e2352230)
+
+- Executing a SELECT-FROM query to perform MEAN encoding.
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/ea1a8c16-50f5-4078-8b01-cc9b5daa5495)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/fb93edae-3871-4e35-8e76-00f534dea773)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/375b753a-ee2e-4421-806f-d242bb9f50c9)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/93fac566-c5ad-4d57-8e14-ad5a2cc5607d)
+
+- Update table by adding columns for MEAN encoding storage.
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/4cf69b55-70f8-4619-b96d-52221cce948c)
+
+- Populate the added columns from the select query that was used to perform MEAN encoding.
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/96bf1dae-c5c3-42a2-92a4-740e86071eac)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/281c2dd1-635c-4ccf-9242-40568622dc85)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/0366629a-b51a-4524-a860-ba1f10237aef)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/727bc298-fa10-49f2-82f4-1f4b9b42b5cf)
+
+
+- Confirm and validate the values in the added columns, then display all values
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/33c15399-de70-40a5-bd3e-a6d885325ef2)
+
+---
+### Task4: Perform Mean Normalization on all the numeric variables to rescale these variables (you may add new columns for this)
+- Mean Normalization Output 
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/f73b97db-1a78-4d11-b16b-3da3129daf2d)
+
+> Steps Below:
+---
+
+- Determine categorical variables for Mean Normalization
+- CATEGORICAL COLUMN TO USE: lotfrontage, lotarea, garagearea, grlivarea, totalbsmtsf, saleprice
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/7e29d5b6-724b-435a-aa99-bf53208aaf34)
+
+
+- Executing a SELECT-FROM query to perform Mean Normalization.
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/a6c5c906-79c3-4b3b-9d08-454d2159fc5b)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/a2a6a30b-3865-484b-ab88-4d6e9d59a38b)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/83435d59-b1e0-4aed-9bdb-17a0782d583f)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/b7c2f96f-b782-4d73-9781-585fd79cbdd2)
+
+- To verify rescaling from -1 to 1
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/4b996e50-68ca-4b9e-92b7-bb75bf512696)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/778d959c-addd-443b-a3fb-93ae4835de44)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/14cef5be-2a5f-4b07-b5b5-a67118104fe1)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/2c4ce487-0e16-47d0-8ce8-b86c1758a605)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/6b3931c8-3ee5-4937-b3fe-0e7200e04b82)
+
+
+- Update table by adding columns for Mean Normalization storage.
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/f1a2b99d-004c-47e3-b706-15f3d96d5539)
+
+
+- Populate the added columns from the select query that was used to perform MEAN encoding.
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/f9a4d34b-b686-4137-8b80-9a8c546c3797)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/f65cdeed-2102-465b-abbb-1e197c6fb55b)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/1f9ef5d2-4f24-434c-a62d-2c8dc7d03389)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/3b39c567-4b59-4835-9451-edcfb9a871ff)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/7372539b-8b65-4989-af59-c6e028cff293)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/edb5ba2f-2fee-4a83-a6ef-9723009cf7d3)
+
+
+- Confirm and validate the values in the added columns, then display all values
+
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/20a0a77a-fb7d-44eb-acba-56f7b18b9ba0)
+![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/f1706ebd-a2ea-443b-8dbd-718b8ff5da86)
+
+---
+### Task5: Perform Standardization on all the numeric variables to rescale these variables (you may add new columns for this)
+
+
+
+## Discussion
 
 ![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/03ec8e0d-019c-45e7-9d61-abdebc8351cc)
 

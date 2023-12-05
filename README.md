@@ -19,7 +19,11 @@ The dataset describes the sale of individual residential property in Ames, Iowa 
 
 ![Criteria](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/4961daac-6770-4fd9-af9f-cc34d52c4d5b)
 
-## Peer Grade Assessment
+## Overall Peer Grade Assessment
+
+![Grade](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/0ca95ba9-c26b-49ff-b897-bf32d93b9fed)
+
+## Peer Grade Assessment Breakdown
 
 ![1](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/f122707d-6ab4-4c9e-9f0a-0664127ba825)
 
@@ -37,9 +41,7 @@ The dataset describes the sale of individual residential property in Ames, Iowa 
 
 
 
-## Overall Peer Grade Assessment
 
-![Grade](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/0ca95ba9-c26b-49ff-b897-bf32d93b9fed)
 
 ---
 

@@ -11,6 +11,10 @@ Capstone project output from "SP701 SQL for Data Engineering" facilitated by Pro
 
 ![Activity](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/4c7983ea-c283-410d-9a5c-82867fc7f462)
 
+## Overall Peer Grade Assessment
+
+![Grade](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/0ca95ba9-c26b-49ff-b897-bf32d93b9fed)
+
 ## Dataset Context
 
 The dataset describes the sale of individual residential property in Ames, Iowa from 2006 to 2010. The data set contains 2930 observations and originally has a large number of explanatory variables (23 nominal, 23 ordinal, 14 discrete, and 20 continuous) involved in assessing home values.
@@ -19,9 +23,6 @@ The dataset describes the sale of individual residential property in Ames, Iowa 
 
 ![Criteria](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/4961daac-6770-4fd9-af9f-cc34d52c4d5b)
 
-## Overall Peer Grade Assessment
-
-![Grade](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/0ca95ba9-c26b-49ff-b897-bf32d93b9fed)
 
 ## Peer Grade Assessment Breakdown
 

@@ -3,7 +3,7 @@
 ![image](https://github.com/jvenncpe/Feature-Engineering-PostgreSQL/assets/35190918/e2904409-8a97-479a-8ec1-4b8f9861135e)
 
 
-# Property Sales - Feature Engineering (PostgreSQL)
+# Feature Engineering (PostgreSQL): Property Sales
 
 Capstone project output from "SP701 SQL for Data Engineering" facilitated by Project SPARTA from Development Academy of the Philippines. The course aims to teach us about tidying up and altering data using SQL, shifting data from one database style to another (such as turning operational data into reports) using SQL, and managing large amounts of data in batches using SQL.
 

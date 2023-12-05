@@ -11,23 +11,6 @@ Capstone project output from "SP701 SQL for Data Engineering" facilitated by Pro
 
 ![Activity](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/4c7983ea-c283-410d-9a5c-82867fc7f462)
 
-Perform the following Feature Engineering tasks:
-	
-	Task1: Perform One-Hot Encoding on the variable on one or more Categorical Variables in the dataset
-	Export: feature_engineering_task1.txt 
- 
- 	Task2: Perform Ordinal or Label encoding on one or more Categorical Variables in the dataset
-	Export: feature_engineering _task2.txt
-
-	Task3: Perform Mean encoding on one or more Categorical Variables in the dataset (hint: you may want to use OVER() and PARTITION() commands)
-	Export: feature_engineering _task3.txt
-
-	Task4: Perform Mean Normalization on all the numeric variables to rescale these variables (you may add new columns for this)
-	Export: feature_engineering _task4.txt
-
-	Task5: Perform Standardization on all the numeric variables to rescale these variables (you may add new columns for this)
-	Export: feature_engineering _task5.txt
-
 ## Dataset Context
 
 The dataset describes the sale of individual residential property in Ames, Iowa from 2006 to 2010. The data set contains 2930 observations and originally has a large number of explanatory variables (23 nominal, 23 ordinal, 14 discrete, and 20 continuous) involved in assessing home values.
@@ -60,8 +43,12 @@ The dataset describes the sale of individual residential property in Ames, Iowa 
 
 ---
 
-## Methodology & Results
+## Methodology
+- Identify columns to be used for Feature Engineering techniques like one-hot encoding, nominal or label encoding, mean encoding, mean normalization, or standardization.
+- Utilize nested SELECT-QUERY to satisfy the required transformations while handling 'NA' or 'NULL' values within columns like 'lotfrontage'. These values are addressed without removing entire rows; instead, a subquery is employed to transform specific columns, maintaining data integrity by using nested subqueries and conditional transformations.
+- After finalizing the SELECT-QUERY, new columns are added to the table to store the transformed data. The SELECT-QUERY is then nested within an INSERT INTO statement to update the tables accordingly.
 
+## Results & Discussion
 ### Task1: Perform One-Hot Encoding on the variable on one or more Categorical Variables in the dataset
 - One-Hot Encoding Output 
 
@@ -285,20 +272,6 @@ The dataset describes the sale of individual residential property in Ames, Iowa 
 ![image](https://github.com/jvenncpe/Property-Sales-Feature-Engineering-PostgreSQL/assets/35190918/517d1fd2-8504-4b2a-a750-dda49270198a)
 
 
-
-## Discussion
-
-Overall, the general steps are as follows:
-- Identifying columns to be used for Feature Engineering techniques like one-hot encoding, nominal or label encoding, mean encoding, mean normalization, or standardization.
-- Craft a nested SELECT-QUERY to satisfy the required transformations while handling 'NA' or 'NULL' values within columns like 'lotfrontage'. These values are addressed without removing entire rows; instead, a subquery is employed to transform specific columns, maintaining data integrity by using nested subqueries and conditional transformations.
-- After finalizing the SELECT-QUERY, new columns are added to the table to store the transformed data. The SELECT-QUERY is then nested within an INSERT INTO statement to update the tables accordingly.
-
-
 # Thank you!
-
----
----
----
-
 
 

@@ -61,7 +61,7 @@ The dataset describes the sale of individual residential property in Ames, Iowa 
 ---
 
 ## Methodology & Results
----
+
 ### Task1: Perform One-Hot Encoding on the variable on one or more Categorical Variables in the dataset
 - One-Hot Encoding Output 
 
